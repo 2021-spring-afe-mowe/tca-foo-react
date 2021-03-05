@@ -136,7 +136,7 @@ function SetupGame({AvailablePlayers}) {
       </h2>
 
       <ul>
-        { AvailablePlayers.map(x => <li>{x}</li>) }
+        { AvailablePlayers.map(x => <li key={x}>{x}</li>) }
       </ul>
 
       <Link to="/play">
