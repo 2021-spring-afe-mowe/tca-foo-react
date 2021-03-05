@@ -10,28 +10,12 @@ export default function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/setup">
+            <SetupGame />
           </Route>
-          <Route path="/users">
-            <Users />
+          <Route path="/play">
+            <PlayGame />
           </Route>
           <Route path="/">
             <Home />
@@ -43,13 +27,43 @@ export default function App() {
 }
 
 function Home() {
-  return <h2>Home</h2>;
+  return (
+    <>
+      <h2>
+        Home
+      </h2>
+
+      <Link to="/setup">
+        Play Game
+      </Link>
+    </>
+  );
 }
 
-function About() {
-  return <h2>About</h2>;
+function SetupGame() {
+  return (
+    <>
+      <h2>
+        Setup Game
+      </h2>
+
+      <Link to="/play">
+        Start
+      </Link>
+    </>
+  );
 }
 
-function Users() {
-  return <h2>Users</h2>;
+function PlayGame() {
+  return (
+    <>
+      <h2>
+        Play
+      </h2>
+
+      <Link to="/">
+        Win, Lose, or Quit
+      </Link>
+    </>
+  );
 }
