@@ -64,6 +64,23 @@ export default function App() {
     console.log(appData);
   };
 
+  const loseGame = () => {
+    updateAppData(
+      [
+        ...appData
+        , {
+          result: "L"
+          , opponents: [
+            "Batman"
+            , "Robin"
+          ]
+        }
+      ]
+    );
+
+    console.log(appData);
+  };
+
   const getAvailablePlayers = (results) => {
 
     const arrayOfPlayerArraysForEachGameResult = results.map(x => x.opponents);
@@ -85,7 +102,7 @@ export default function App() {
             <SetupGame AvailablePlayers={getAvailablePlayers(appData)} />
           </Route>
           <Route path="/play">
-            <PlayGame propWinGameFunction={winGame} />
+            <PlayGame propWinGameFunction={winGame} propLoseGameFunction={loseGame} />
           </Route>
           <Route path="/">
             <Home appData={appData} />
@@ -112,6 +129,10 @@ function Home({appData}) {
 
       <h3>
         Wins: { appData.filter(x => x.result == "W").length }
+      </h3>
+
+      <h3>
+        Losses: { appData.filter(x => x.result == "L").length }
       </h3>
 
       <Link to="/setup">
@@ -146,12 +167,17 @@ function SetupGame({AvailablePlayers}) {
   );
 }
 
-function PlayGame({propWinGameFunction}) {
+function PlayGame({propWinGameFunction, propLoseGameFunction}) {
   
   const history = useHistory();
   
   const localWinGameFunction = () => {
     propWinGameFunction();
+    history.push("/");
+  };
+
+  const localLoseGameFunction = () => {
+    propLoseGameFunction();
     history.push("/");
   };
 
@@ -165,6 +191,12 @@ function PlayGame({propWinGameFunction}) {
         onClick={() => localWinGameFunction()}
       >
         Win
+      </button>
+    
+      <button
+        onClick={() => localLoseGameFunction()}
+      >
+        Lose
       </button>
     </>
   );
