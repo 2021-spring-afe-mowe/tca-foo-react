@@ -150,6 +150,28 @@ function Home({appData}) {
 }
 
 function SetupGame({AvailablePlayers}) {
+
+  // Want a checked property on the AvailablePlayers...
+  const availablePlayersWithChosenProperty = AvailablePlayers.map(x => ({
+    name: x
+    , chosen: false
+  }));
+
+  const [availablePlayers, updateAvailablePlayers] = useState(availablePlayersWithChosenProperty);
+
+  const handleAdd = (name) => {
+    console.log(name);
+    updateAvailablePlayers([
+      ...availablePlayers.map(x => x.name == name ? {...x, chosen: true } : x)
+    ]);
+  };
+
+  const handleRemove = (name) => {
+    updateAvailablePlayers([
+      ...availablePlayers.map(x => x.name == name ? {...x, chosen: false } : x)
+    ]);
+  };
+
   return (
     <>
       <h2>
@@ -157,7 +179,20 @@ function SetupGame({AvailablePlayers}) {
       </h2>
 
       <ul>
-        { AvailablePlayers.map(x => <li key={x}>{x}</li>) }
+        { 
+          availablePlayers.map(x => (
+            <li key={x.name}>
+              {x.name}
+              &nbsp;
+              &nbsp;
+              {x.chosen || <button onClick={() => handleAdd(x.name)}>Add</button>}
+
+              {!x.chosen || <button onClick={() => handleRemove(x.name)}>Remove</button>}
+
+            </li>
+            )
+          ) 
+        }
       </ul>
 
       <Link to="/play">
