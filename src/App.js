@@ -20,22 +20,35 @@ export default function App() {
       , opponents: [
         "Jack"
       ]
-  }
+    }
     , { 
       result: "W"
       , opponents: [
         "Taylor"
         , "Jack"
       ]
-  }
+    }
   ];
+
+  const getAvailablePlayers = (results) => {
+
+    const arrayOfPlayerArraysForEachGameResult = results.map(x => x.opponents);
+    const flattenedArrayOfArrays = arrayOfPlayerArraysForEachGameResult.reduce(
+        (acc, x) => [...acc, ...x]
+        , []
+    );
+
+    const uniquePlayerNames = new Set(flattenedArrayOfArrays);
+
+    return [...uniquePlayerNames];
+  };
 
   return (
     <Router>
       <div>
         <Switch>
           <Route path="/setup">
-            <SetupGame AppData={sharedAppData} />
+            <SetupGame AvailablePlayers={getAvailablePlayers(sharedAppData)} />
           </Route>
           <Route path="/play">
             <PlayGame />
@@ -63,17 +76,17 @@ function Home() {
   );
 }
 
-function SetupGame({AppData}) {
+function SetupGame({AvailablePlayers}) {
   return (
     <>
       <h2>
         Setup Game
       </h2>
 
-      <p>
-        Previous number of games: {AppData.length}
-      </p>
-      
+      <ul>
+        { AvailablePlayers.map(x => <li>{x}</li>) }
+      </ul>
+
       <Link to="/play">
         Start
       </Link>
