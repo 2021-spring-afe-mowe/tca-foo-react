@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
 
 export default function App() {
@@ -63,6 +64,9 @@ export default function App() {
 }
 
 function Home() {
+  
+  const history = useHistory();
+  
   return (
     <>
       <h2>
@@ -72,6 +76,13 @@ function Home() {
       <Link to="/setup">
         Play Game
       </Link>
+      <br />
+      <br />
+      <button
+        onClick={() => history.push("/setup")}
+      >
+        Play Game
+      </button>
     </>
   );
 }
