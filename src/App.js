@@ -1,4 +1,10 @@
-import React from "react";
+import 
+  React 
+  ,{
+    useState
+    , useEffect
+  } from "react";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,27 +15,54 @@ import {
 
 export default function App() {
 
-  const sharedAppData = [
-    { 
-      result: "W"
-      , opponents: [
-          "Taylor"
+  const [appData, updateAppData] = useState([]);
+
+  useEffect(
+    () => {
+      updateAppData( 
+        [
+          { 
+            result: "W"
+            , opponents: [
+                "Taylor"
+              ]
+          }
+          , { 
+            result: "L"
+            , opponents: [
+              "Jack"
+            ]
+          }
+          , { 
+            result: "W"
+            , opponents: [
+              "Taylor"
+              , "Jack"
+            ]
+          }
         ]
+      );
     }
-    , { 
-      result: "L"
-      , opponents: [
-        "Jack"
+    , []
+  );
+   
+  const winGame = () => {
+    updateAppData(
+      [
+        ...appData
+        , {
+          result: "W"
+          , opponents: [
+            "Larry"
+            , "Curly"
+            , "Moe"
+          ]
+        }
       ]
-    }
-    , { 
-      result: "W"
-      , opponents: [
-        "Taylor"
-        , "Jack"
-      ]
-    }
-  ];
+    );
+
+    console.log(appData);
+  };
 
   const getAvailablePlayers = (results) => {
 
@@ -49,10 +82,10 @@ export default function App() {
       <div>
         <Switch>
           <Route path="/setup">
-            <SetupGame AvailablePlayers={getAvailablePlayers(sharedAppData)} />
+            <SetupGame AvailablePlayers={getAvailablePlayers(appData)} />
           </Route>
           <Route path="/play">
-            <PlayGame />
+            <PlayGame propWinGameFunction={winGame} />
           </Route>
           <Route path="/">
             <Home />
@@ -105,16 +138,26 @@ function SetupGame({AvailablePlayers}) {
   );
 }
 
-function PlayGame() {
+function PlayGame({propWinGameFunction}) {
+  
+  const history = useHistory();
+  
+  const localWinGameFunction = () => {
+    propWinGameFunction();
+    history.push("/");
+  };
+
   return (
     <>
       <h2>
         Play
       </h2>
 
-      <Link to="/">
-        Win, Lose, or Quit
-      </Link>
+      <button
+        onClick={() => localWinGameFunction()}
+      >
+        Win
+      </button>
     </>
   );
 }
