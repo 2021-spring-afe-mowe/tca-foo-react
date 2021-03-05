@@ -88,7 +88,7 @@ export default function App() {
             <PlayGame propWinGameFunction={winGame} />
           </Route>
           <Route path="/">
-            <Home />
+            <Home appData={appData} />
           </Route>
         </Switch>
       </div>
@@ -96,7 +96,7 @@ export default function App() {
   );
 }
 
-function Home() {
+function Home({appData}) {
   
   const history = useHistory();
   
@@ -105,6 +105,14 @@ function Home() {
       <h2>
         Home
       </h2>
+
+      <h3>
+        Total games: { appData.length }
+      </h3>
+
+      <h3>
+        Wins: { appData.filter(x => x.result == "W").length }
+      </h3>
 
       <Link to="/setup">
         Play Game
