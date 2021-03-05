@@ -15,70 +15,59 @@ import {
 
 export default function App() {
 
-  const [appData, updateAppData] = useState([]);
-
-  useEffect(
-    () => {
-      updateAppData( 
-        [
-          { 
-            result: "W"
-            , opponents: [
-                "Taylor"
-              ]
-          }
-          , { 
-            result: "L"
-            , opponents: [
-              "Jack"
-            ]
-          }
-          , { 
-            result: "W"
-            , opponents: [
-              "Taylor"
-              , "Jack"
-            ]
-          }
+  const [appData, updateAppData] = useState({
+    gameResults: [
+      { 
+        result: "W"
+        , opponents: [
+            "Taylor"
+          ]
+      }
+      , { 
+        result: "L"
+        , opponents: [
+          "Jack"
         ]
-      );
+      }
+      , { 
+        result: "W"
+        , opponents: [
+          "Taylor"
+          , "Jack"
+        ]
+      }
+    ]
+    , currentGame: {
+      opponents: []
     }
-    , []
-  );
+  });
    
   const winGame = () => {
-    updateAppData(
-      [
-        ...appData
+    updateAppData({
+      ...appData
+      , gameResults: [
+        ...appData.gameResults
         , {
           result: "W"
-          , opponents: [
-            "Larry"
-            , "Curly"
-            , "Moe"
-          ]
+          , opponents: appData.currentGame.opponents
         }
       ]
-    );
+    });
 
     console.log(appData);
   };
 
   const loseGame = () => {
-    updateAppData(
-      [
-        ...appData
+    updateAppData({
+      ...appData
+      , gameResults: [
+        ...appData.gameResults
         , {
           result: "L"
-          , opponents: [
-            "Batman"
-            , "Robin"
-          ]
+          , opponents: appData.currentGame.opponents
         }
       ]
-    );
-
-    console.log(appData);
+    });
   };
 
   const getAvailablePlayers = (results) => {
@@ -94,18 +83,37 @@ export default function App() {
     return [...uniquePlayerNames];
   };
 
+  const setCurrentGameOpponents = (opponents) => {
+    console.log(opponents);
+
+    updateAppData({
+      ...appData
+      , currentGame: {
+        opponents: opponents
+      }
+    });
+  };
+
   return (
     <Router>
       <div>
         <Switch>
           <Route path="/setup">
-            <SetupGame AvailablePlayers={getAvailablePlayers(appData)} />
+            <SetupGame 
+              availablePlayersProp={getAvailablePlayers(appData.gameResults)}
+              setCurrentGameOpponentsProp={setCurrentGameOpponents} 
+            />
           </Route>
           <Route path="/play">
-            <PlayGame propWinGameFunction={winGame} propLoseGameFunction={loseGame} />
+            <PlayGame 
+              propWinGameFunction={winGame} 
+              propLoseGameFunction={loseGame} 
+            />
           </Route>
           <Route path="/">
-            <Home appData={appData} />
+            <Home 
+              appData={appData} 
+            />
           </Route>
         </Switch>
       </div>
@@ -124,15 +132,15 @@ function Home({appData}) {
       </h2>
 
       <h3>
-        Total games: { appData.length }
+        Total games: { appData.gameResults.length }
       </h3>
 
       <h3>
-        Wins: { appData.filter(x => x.result == "W").length }
+        Wins: { appData.gameResults.filter(x => x.result == "W").length }
       </h3>
 
       <h3>
-        Losses: { appData.filter(x => x.result == "L").length }
+        Losses: { appData.gameResults.filter(x => x.result == "L").length }
       </h3>
 
       <Link to="/setup">
@@ -149,10 +157,10 @@ function Home({appData}) {
   );
 }
 
-function SetupGame({AvailablePlayers}) {
+function SetupGame({availablePlayersProp, setCurrentGameOpponentsProp}) {
 
   // Want a checked property on the AvailablePlayers...
-  const availablePlayersWithChosenProperty = AvailablePlayers.map(x => ({
+  const availablePlayersWithChosenProperty = availablePlayersProp.map(x => ({
     name: x
     , chosen: false
   }));
@@ -170,6 +178,17 @@ function SetupGame({AvailablePlayers}) {
     updateAvailablePlayers([
       ...availablePlayers.map(x => x.name == name ? {...x, chosen: false } : x)
     ]);
+  };
+
+  const history = useHistory();
+  
+  const localStartGameFunction = () => {
+    setCurrentGameOpponentsProp(
+      availablePlayers
+        .filter(x => x.chosen)
+        .map(x => x.name)
+      );
+    history.push("/play");
   };
 
   return (
@@ -195,9 +214,12 @@ function SetupGame({AvailablePlayers}) {
         }
       </ul>
 
-      <Link to="/play">
-        Start
-      </Link>
+      <button
+        onClick={() => localStartGameFunction()}
+      >
+        Start Game
+      </button>
+
     </>
   );
 }
