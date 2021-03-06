@@ -198,6 +198,22 @@ const SetupGame = ({
     history.push("/play");
   };
 
+  const [newPlayerName, updateNewPlayerName] = useState("");
+
+  const handleNameChange = (e) => {
+    updateNewPlayerName(e.target.value);
+  };
+
+  const addNewPlayer = () => {
+    updateAvailableOpponents([
+      ...availableOpponents
+      , {
+        name: newPlayerName
+        , chosen: true
+      }
+    ]);
+  };
+
   return (
     <>
       <h2>
@@ -220,6 +236,21 @@ const SetupGame = ({
           ) 
         }
       </ul>
+
+      <br />
+
+      <input
+        value={newPlayerName}
+        onChange={handleNameChange} 
+      />
+      <button
+        onClick={() => addNewPlayer()}
+      >
+        +
+      </button>
+
+      <br />
+      <br />
 
       <button
         onClick={() => startGame()}
