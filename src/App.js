@@ -13,7 +13,7 @@ import {
   useHistory
 } from "react-router-dom";
 
-export default function App() {
+export const App = () => {
 
   const [appData, updateAppData] = useState({
     gameResults: [
@@ -42,7 +42,7 @@ export default function App() {
     }
   });
    
-  const winGame = () => {
+  const notifyAppWinGame = () => {
     updateAppData({
       ...appData
       , gameResults: [
@@ -53,11 +53,9 @@ export default function App() {
         }
       ]
     });
-
-    console.log(appData);
   };
 
-  const loseGame = () => {
+  const notifyAppLoseGame = () => {
     updateAppData({
       ...appData
       , gameResults: [
@@ -83,9 +81,7 @@ export default function App() {
     return [...uniquePlayerNames];
   };
 
-  const setCurrentGameOpponents = (opponents) => {
-    console.log(opponents);
-
+  const notifyAppSetCurrentGameOpponents = (opponents) => {
     updateAppData({
       ...appData
       , currentGame: {
@@ -100,19 +96,21 @@ export default function App() {
         <Switch>
           <Route path="/setup">
             <SetupGame 
-              availablePlayersProp={getAvailablePlayers(appData.gameResults)}
-              setCurrentGameOpponentsProp={setCurrentGameOpponents} 
+              availablePlayers={getAvailablePlayers(appData.gameResults)}
+              notifyAppSetCurrentGameOpponents={notifyAppSetCurrentGameOpponents} 
             />
           </Route>
           <Route path="/play">
             <PlayGame 
-              propWinGameFunction={winGame} 
-              propLoseGameFunction={loseGame} 
+              notifyAppWinGame={notifyAppWinGame} 
+              notifyAppLoseGame={notifyAppLoseGame} 
             />
           </Route>
           <Route path="/">
             <Home 
-              appData={appData} 
+              appData={appData}
+              lossesVersus={getAvailablePlayers(appData.gameResults.filter(x => x.result == "L"))} 
+              winsVersus={getAvailablePlayers(appData.gameResults.filter(x => x.result == "W"))} 
             />
           </Route>
         </Switch>
@@ -121,7 +119,11 @@ export default function App() {
   );
 }
 
-function Home({appData}) {
+const Home = ({
+  appData
+  , lossesVersus
+  , winsVersus
+}) => {
   
   const history = useHistory();
   
@@ -139,15 +141,18 @@ function Home({appData}) {
         Wins: { appData.gameResults.filter(x => x.result == "W").length }
       </h3>
 
+      <ul>
+        { winsVersus.map(x => <li key={x}>{x}</li>)}
+      </ul>
+
       <h3>
         Losses: { appData.gameResults.filter(x => x.result == "L").length }
       </h3>
 
-      <Link to="/setup">
-        Play Game
-      </Link>
-      <br />
-      <br />
+      <ul>
+        { lossesVersus.map(x => <li key={x}>{x}</li>)}
+      </ul>
+      
       <button
         onClick={() => history.push("/setup")}
       >
@@ -157,34 +162,36 @@ function Home({appData}) {
   );
 }
 
-function SetupGame({availablePlayersProp, setCurrentGameOpponentsProp}) {
+const SetupGame = ({
+  availablePlayers
+  , notifyAppSetCurrentGameOpponents
+}) => {
 
   // Want a checked property on the AvailablePlayers...
-  const availablePlayersWithChosenProperty = availablePlayersProp.map(x => ({
+  const availablePlayersWithChosenProperty = availablePlayers.map(x => ({
     name: x
     , chosen: false
   }));
 
-  const [availablePlayers, updateAvailablePlayers] = useState(availablePlayersWithChosenProperty);
+  const [availableOpponents, updateAvailableOpponents] = useState(availablePlayersWithChosenProperty);
 
-  const handleAdd = (name) => {
-    console.log(name);
-    updateAvailablePlayers([
-      ...availablePlayers.map(x => x.name == name ? {...x, chosen: true } : x)
+  const handleAddOpponent = (name) => {
+    updateAvailableOpponents([
+      ...availableOpponents.map(x => x.name == name ? {...x, chosen: true } : x)
     ]);
   };
 
-  const handleRemove = (name) => {
-    updateAvailablePlayers([
-      ...availablePlayers.map(x => x.name == name ? {...x, chosen: false } : x)
+  const handleRemoveOpponent = (name) => {
+    updateAvailableOpponents([
+      ...availableOpponents.map(x => x.name == name ? {...x, chosen: false } : x)
     ]);
   };
 
   const history = useHistory();
   
-  const localStartGameFunction = () => {
-    setCurrentGameOpponentsProp(
-      availablePlayers
+  const startGame = () => {
+    notifyAppSetCurrentGameOpponents(
+      availableOpponents
         .filter(x => x.chosen)
         .map(x => x.name)
       );
@@ -199,14 +206,14 @@ function SetupGame({availablePlayersProp, setCurrentGameOpponentsProp}) {
 
       <ul>
         { 
-          availablePlayers.map(x => (
+          availableOpponents.map(x => (
             <li key={x.name}>
               {x.name}
               &nbsp;
               &nbsp;
-              {x.chosen || <button onClick={() => handleAdd(x.name)}>Add</button>}
+              {x.chosen || <button onClick={() => handleAddOpponent(x.name)}>Add</button>}
 
-              {!x.chosen || <button onClick={() => handleRemove(x.name)}>Remove</button>}
+              {!x.chosen || <button onClick={() => handleRemoveOpponent(x.name)}>Remove</button>}
 
             </li>
             )
@@ -215,7 +222,7 @@ function SetupGame({availablePlayersProp, setCurrentGameOpponentsProp}) {
       </ul>
 
       <button
-        onClick={() => localStartGameFunction()}
+        onClick={() => startGame()}
       >
         Start Game
       </button>
@@ -224,17 +231,20 @@ function SetupGame({availablePlayersProp, setCurrentGameOpponentsProp}) {
   );
 }
 
-function PlayGame({propWinGameFunction, propLoseGameFunction}) {
+const PlayGame = ({
+  notifyAppWinGame
+  , notifyAppLoseGame
+}) => {
   
   const history = useHistory();
   
-  const localWinGameFunction = () => {
-    propWinGameFunction();
+  const winGame = () => {
+    notifyAppWinGame();
     history.push("/");
   };
 
-  const localLoseGameFunction = () => {
-    propLoseGameFunction();
+  const loseGame = () => {
+    notifyAppLoseGame();
     history.push("/");
   };
 
@@ -245,13 +255,16 @@ function PlayGame({propWinGameFunction, propLoseGameFunction}) {
       </h2>
 
       <button
-        onClick={() => localWinGameFunction()}
+        onClick={() => winGame()}
       >
         Win
       </button>
     
+      <br />
+      <br />
+
       <button
-        onClick={() => localLoseGameFunction()}
+        onClick={() => loseGame()}
       >
         Lose
       </button>
