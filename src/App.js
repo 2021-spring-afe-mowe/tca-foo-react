@@ -141,6 +141,10 @@ const Home = ({
         Wins: { appData.gameResults.filter(x => x.result == "W").length }
       </h3>
 
+      <h4>
+        Players I've won against...
+      </h4>
+
       <ul>
         { winsVersus.map(x => <li key={x}>{x}</li>)}
       </ul>
@@ -148,6 +152,10 @@ const Home = ({
       <h3>
         Losses: { appData.gameResults.filter(x => x.result == "L").length }
       </h3>
+
+      <h4>
+        Players I've lost against...
+      </h4>
 
       <ul>
         { lossesVersus.map(x => <li key={x}>{x}</li>)}
