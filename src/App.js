@@ -5,8 +5,7 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
 
 import { Play } from './Play.js';
@@ -15,11 +14,6 @@ import { Home } from './Home.js';
 function App() {
   return (
     <Router>
-      <nav>
-        <Link to="/home">Link to Home</Link><br/>
-        <Link to="/play">Link to Play</Link>
-      </nav>
-
       <Switch>
         <Route path="/play">
         <Play></Play>
