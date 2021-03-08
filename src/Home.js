@@ -1,14 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const Home = () => {
+export const Home = ({totalNumberOfGames}) => {
 
     const history = useHistory();
     
     return(
         <>
             <h1>
-                Home
+                Home ({totalNumberOfGames})
             </h1>
 
             <button

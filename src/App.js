@@ -22,7 +22,7 @@ function App() {
 
   console.log(initialAppData);
 
-  const [appData, updateAppData] = useState({});
+  const [appData, updateAppData] = useState(initialAppData);
 
   return (
     <Router>
@@ -40,7 +40,9 @@ function App() {
           <Play />
         </Route>
         <Route path="/">
-          <Home />
+          <Home 
+            totalNumberOfGames={appData.length}
+          />
         </Route>
       </Switch>
     </Router>
