@@ -19,12 +19,17 @@ function App() {
       , endDateTime: "Noon thirty on Christmas of last year"
       , gameResult: "W"
     }
+    , {
+      startDateTime: "Blah"
+      , endDateTime: "Blah + 1"
+      , gameResult: "L"
+    }
   ];
 
   const [appData, updateAppData] = useState(initialAppData);
 
   console.log(appData);
-  
+
   return (
     <Router>
       <Switch>
@@ -36,7 +41,9 @@ function App() {
         <Route
           path="/"
         >
-          <Home />
+          <Home
+            totalNumberOfGames={appData.length}
+          />
         </Route>
       </Switch>
     </Router>
