@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const play = () => {
+export const Play = () => {
     return(
-        <h1>Play</h1>
+        <h1>Play!</h1>
     );
 }
