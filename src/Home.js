@@ -2,9 +2,17 @@ import React from 'react';
 
 import { useHistory } from 'react-router-dom';
 
-export const Home = ({totalNumberOfGames}) => {
+export const Home = ({
+    totalNumberOfGames
+    , notifyNewGameStartTime
+}) => {
 
     const history = useHistory();
+
+    const startGame = () => {
+        notifyNewGameStartTime("Foo Bar Cat");
+        history.push("/play");
+    };
 
     return(
         <>
@@ -13,7 +21,7 @@ export const Home = ({totalNumberOfGames}) => {
             </h1>
 
             <button
-                onClick={() => history.push('/play')}
+                onClick={startGame}
             >
                 Play
             </button>

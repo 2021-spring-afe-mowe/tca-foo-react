@@ -13,22 +13,34 @@ import { useState } from 'react';
 
 function App() {
 
-  const initialAppData = [
-    {
-      startDateTime: "Noon on Christmas of last year"
-      , endDateTime: "Noon thirty on Christmas of last year"
-      , gameResult: "W"
-    }
-    , {
-      startDateTime: "Blah"
-      , endDateTime: "Blah + 1"
-      , gameResult: "L"
-    }
-  ];
+  const initialAppData = {
+    gameResults: [
+      {
+        startDateTime: "Noon on Christmas of last year"
+        , endDateTime: "Noon thirty on Christmas of last year"
+        , gameResult: "W"
+      }
+      , {
+        startDateTime: "Blah"
+        , endDateTime: "Blah + 1"
+        , gameResult: "L"
+      }
+    ]
+    , currentGameStartTime: ""
+  }
+  ;
 
   const [appData, updateAppData] = useState(initialAppData);
 
   console.log(appData);
+
+  const notifyAppUpdateCurrentGameStartTime = (newStartTime) => {
+    console.log(newStartTime);
+    updateAppData({
+      ...appData
+      , currentGameStartTime: newStartTime 
+    });
+  };
 
   return (
     <Router>
@@ -42,7 +54,8 @@ function App() {
           path="/"
         >
           <Home
-            totalNumberOfGames={appData.length}
+            totalNumberOfGames={appData.gameResults.length}
+            notifyNewGameStartTime={notifyAppUpdateCurrentGameStartTime}
           />
         </Route>
       </Switch>
