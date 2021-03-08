@@ -1,19 +1,21 @@
 import React from 'react';
-
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export const Home = () => {
+
+    const history = useHistory();
+    
     return(
         <>
             <h1>
                 Home
             </h1>
 
-            <button>
+            <button
+                onClick={() => history.pushState('play')}
+            >
                 Play
             </button>
         </>
     );
 };
-
-export default Home();

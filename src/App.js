@@ -9,7 +9,21 @@ import {
   , BrowserRouter as Router
 } from 'react-router-dom';
 
+import { useState } from 'react';
+
 function App() {
+  const initialAppData = [
+    {
+      startDateTime: "noon on christmas"
+      , endDateTime: "noon thirty on christmas"
+      , gameResult: "w"
+    }
+  ];
+
+  console.log(initialAppData);
+
+  const [appData, updateAppData] = useState({});
+
   return (
     <Router>
       <nav>
