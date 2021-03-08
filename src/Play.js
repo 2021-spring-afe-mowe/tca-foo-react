@@ -16,7 +16,9 @@ export const Play = () => {
             >
                 Win
             </button>
+
             &nbsp;
+            
             <button
                 onClick={() => history.goBack()}
             >
