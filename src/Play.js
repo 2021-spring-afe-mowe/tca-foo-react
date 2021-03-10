@@ -1,9 +1,22 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const Play = () => {
+export const Play = ({
+    appWinGame
+    , appLoseGame
+}) => {
 
     const history = useHistory();
+
+    const winGame = () => {
+        appWinGame();
+        history.goBack();
+    };
+
+    const loseGame = () => {
+        appLoseGame();
+        history.goBack();
+    };
 
     return (
         <>
@@ -11,15 +24,15 @@ export const Play = () => {
                 Play
             </h1>
             <button
-                onClick={() => history.goBack()}
+                onClick={winGame}
             >
                 Win
             </button>
             &nbsp;
             <button
-                onClick={() => history.goBack()}
+                onClick={loseGame}
             >
-                Loss
+                Lose
             </button>
         </>
     );

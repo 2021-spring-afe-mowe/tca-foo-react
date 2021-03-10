@@ -44,13 +44,44 @@ function App() {
 
   };
 
+  const winGame = () => {
+    updateAppData({
+      ...appData
+      , gameResults: [
+        ...appData.gameResults
+        , {
+          startDateTime: appData.currentGameStartTime
+          , endDateTime: Date.now()
+          , gameResult: "W"
+        }
+      ]
+    });
+  };
+
+  const loseGame = () => {
+    updateAppData({
+      ...appData
+      , gameResults: [
+        ...appData.gameResults
+        , {
+          startDateTime: appData.currentGameStartTime
+          , endDateTime: Date.now()
+          , gameResult: "L"
+        }
+      ]
+    });
+  };
+
   return (
     <Router>
       <Switch>
         <Route
           path="/play"
         >
-          <Play />
+          <Play 
+            appWinGame={winGame}
+            appLoseGame={loseGame}
+          />
         </Route>
         <Route
           path="/"
