@@ -4,13 +4,13 @@ import { useHistory } from 'react-router-dom';
 
 export const Home = ({
     totalNumberOfGames
-    , notifyNewGameStartTime
+    , appStartGame
 }) => {
 
     const history = useHistory();
 
     const startGame = () => {
-        notifyNewGameStartTime("Foo Bar Cat");
+        appStartGame();
         history.push("/play");
     };
 

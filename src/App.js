@@ -16,17 +16,17 @@ function App() {
   const initialAppData = {
     gameResults: [
       {
-        startDateTime: "Noon on Christmas of last year"
-        , endDateTime: "Noon thirty on Christmas of last year"
+        startDateTime: Date.now()
+        , endDateTime: Date.now()
         , gameResult: "W"
       }
       , {
-        startDateTime: "Blah"
-        , endDateTime: "Blah + 1"
+        startDateTime: Date.now()
+        , endDateTime: Date.now()
         , gameResult: "L"
       }
     ]
-    , currentGameStartTime: ""
+    , currentGameStartTime: null
   }
   ;
 
@@ -34,12 +34,14 @@ function App() {
 
   console.log(appData);
 
-  const notifyAppUpdateCurrentGameStartTime = (newStartTime) => {
-    console.log(newStartTime);
+  const startGame = () => {
     updateAppData({
       ...appData
-      , currentGameStartTime: newStartTime 
+      , currentGameStartTime: Date.now() 
     });
+
+    console.log("App.startGame()", appData.currentGameStartTime);
+
   };
 
   return (
@@ -55,7 +57,7 @@ function App() {
         >
           <Home
             totalNumberOfGames={appData.gameResults.length}
-            notifyNewGameStartTime={notifyAppUpdateCurrentGameStartTime}
+            appStartGame={startGame}
           />
         </Route>
       </Switch>
