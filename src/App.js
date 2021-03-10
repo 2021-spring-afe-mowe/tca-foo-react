@@ -14,18 +14,7 @@ import { useState } from 'react';
 function App() {
 
   const initialAppData = {
-    gameResults: [
-      {
-        startDateTime: Date.now()
-        , endDateTime: Date.now()
-        , gameResult: "W"
-      }
-      , {
-        startDateTime: Date.now()
-        , endDateTime: Date.now()
-        , gameResult: "L"
-      }
-    ]
+    gameResults: []
     , currentGameStartTime: null
   }
   ;
@@ -33,6 +22,10 @@ function App() {
   const [appData, updateAppData] = useState(initialAppData);
 
   console.log(appData);
+
+  //
+  // App notification functions...
+  //
 
   const startGame = () => {
     updateAppData({
@@ -72,6 +65,19 @@ function App() {
     });
   };
 
+  //
+  // Helper functions...
+  //
+  const calculateGameTimeFacts = () => {
+    
+    const gameTimes = appData.gameResults.map(x => x.endDateTime - x.startDateTime);
+
+    return {
+      longest: Math.max(...gameTimes)
+      , shortest: Math.min(...gameTimes)
+    };
+  };
+
   return (
     <Router>
       <Switch>
@@ -89,6 +95,7 @@ function App() {
           <Home
             totalNumberOfGames={appData.gameResults.length}
             appStartGame={startGame}
+            gameTimeFacts={calculateGameTimeFacts()}
           />
         </Route>
       </Switch>
