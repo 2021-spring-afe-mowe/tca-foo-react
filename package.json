@@ -2,6 +2,7 @@
   "name": "tca-foo-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://2021-spring-afe-mowe.github.io/tca-foo-react",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
