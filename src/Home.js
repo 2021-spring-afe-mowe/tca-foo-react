@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 
@@ -14,6 +14,8 @@ export const Home = ({
         appStartGame();
         history.push("/play");
     };
+
+    const [myProp, updateMyProp] = useState("Tom");
 
     return(
         <>
@@ -33,6 +35,19 @@ export const Home = ({
 
             <h3>
                 { isFinite(gameTimeFacts.shortest) ? gameTimeFacts.shortest : 0 } Shortest Game Ever
+            </h3>
+
+            <br />
+            <br />
+
+            <input
+                type="text"
+                value={myProp}
+                onChange={(e) => updateMyProp(e.target.value)} 
+            />
+        
+            <h3>
+                { myProp }
             </h3>
         </>
     );
